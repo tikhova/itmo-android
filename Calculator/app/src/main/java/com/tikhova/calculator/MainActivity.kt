@@ -10,12 +10,9 @@ import android.R.attr.name
 class MainActivity : AppCompatActivity() {
     val SCREEN_TEXT = "screenText"
     val DOT_FLAG = "dotEnabled"
-    val RESULT_FLAG = "isResultShown"
     val OPERATION_FLAG = "lastIsOperation"
 
-
     var dotEnabled: Boolean = true
-    var isResultShown: Boolean = false
     var lastIsOperation: Boolean = false
     val operations: Array<String> = arrayOf("/", "*", "+", "-")
 
@@ -58,15 +55,13 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState != null) {
             screen.text = savedInstanceState.getString(SCREEN_TEXT)
             dotEnabled = savedInstanceState.getBoolean(DOT_FLAG)
-            isResultShown= savedInstanceState.getBoolean(RESULT_FLAG)
-            lastIsOperation= savedInstanceState.getBoolean(OPERATION_FLAG)
+            lastIsOperation = savedInstanceState.getBoolean(OPERATION_FLAG)
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putString(SCREEN_TEXT, screen.text.toString())
         outState.putBoolean(DOT_FLAG, dotEnabled)
-        outState.putBoolean(RESULT_FLAG, isResultShown)
         outState.putBoolean(OPERATION_FLAG, lastIsOperation)
 
         super.onSaveInstanceState(outState)
@@ -74,10 +69,7 @@ class MainActivity : AppCompatActivity() {
 
     fun appendValue(value: String) {
         if (value.isOperation()) {
-            if (isResultShown) {
-                resetScreen()
-            }
-            if (screen.text.isNotEmpty()) {
+            if (screen.text.isNotEmpty() || value == "-") {
                 if (lastIsOperation) {
                     removeLastSymbol()
                 }
@@ -97,7 +89,6 @@ class MainActivity : AppCompatActivity() {
 
     fun resetScreen() {
         dotEnabled = true
-        isResultShown = false
         lastIsOperation = false
         screen.text = ""
     }
