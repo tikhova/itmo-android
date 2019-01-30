@@ -1,0 +1,2 @@
+C:\Users\tmg19\AndroidStudioProjects\PicturesNetworking\app\src\main\java\com\tikhova\picturesnetworking\PictureListActivity.kt
+C:\Users\tmg19\AndroidStudioProjects\PicturesNetworking\app\src\main\java\com\tikhova\picturesnetworking\PictureDetailFragment.kt
