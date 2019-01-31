@@ -1,7 +1,0 @@
-#Internal package file, do not edit.
-#Thu Jan 24 23:46:44 MSK 2019
-0.baseType=DIRECTORY
-0.base=C\:\\Users\\tmg19\\AndroidStudioProjects\\PicturesNetworking\\app\\build\\intermediates\\dex\\debug\\mergeDexDebug\\out
-0.path=classes.dex
-0.set=DEX
-count=1
