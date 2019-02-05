@@ -1,13 +1,19 @@
 package com.tikhova.picturesnetworking
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.os.Handler
+import android.os.ResultReceiver
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.squareup.picasso.Picasso
 import com.tikhova.picturesnetworking.dummy.PictureContent
+import kotlinx.android.synthetic.main.picture_detail.*
 import kotlinx.android.synthetic.main.picture_detail.view.*
+
 
 /**
  * A fragment representing a single Picture detail screen.
@@ -18,6 +24,17 @@ import kotlinx.android.synthetic.main.picture_detail.view.*
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class PictureDetailFragment : Fragment() {
 
+    inner class ImageResultReceiver : ResultReceiver(Handler()) {
+        override fun onReceiveResult(resultCode: Int, resultData: Bundle) {
+            val filePath = resultData.getString("filePath")
+            val bmp = BitmapFactory.decodeFile(filePath)
+            detail_imgView.setImageBitmap(bmp)
+            super.onReceiveResult(resultCode, resultData)
+        }
+    }
+
+
+    private val imageResultReceiver = ImageResultReceiver()
     private var item: PictureContent.PictureItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +56,9 @@ class PictureDetailFragment : Fragment() {
         val rootView = inflater.inflate(R.layout.picture_detail, container, false)
         // Show the dummy content as picture in ImageView
         item?.let {
-            Picasso.get().load(item?.fullURL).into(rootView.detail_imgView)
+            //Picasso.get().load(item?.fullURL).into(rootView.detail_imgView)
+
+            PictureLoaderService().load(this.context!!, item?.fullURL, item?.id, imageResultReceiver)
         }
 
         return rootView
@@ -53,3 +72,6 @@ class PictureDetailFragment : Fragment() {
         const val ARG_ITEM_ID = "item_id"
     }
 }
+
+
+

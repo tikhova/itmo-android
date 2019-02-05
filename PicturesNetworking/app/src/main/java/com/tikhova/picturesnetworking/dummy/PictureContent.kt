@@ -1,27 +1,31 @@
 package com.tikhova.picturesnetworking.dummy
 
+import android.graphics.Bitmap
 import android.os.AsyncTask
+import android.content.Context
+import android.graphics.BitmapFactory
+import com.tikhova.picturesnetworking.PictureListActivity
+import com.tikhova.picturesnetworking.PictureLoaderService
 import org.json.JSONObject
+import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
+
 
 object PictureContent {
 
     val ITEMS: MutableList<PictureItem> = ArrayList()
     val ITEM_MAP: MutableMap<String, PictureItem> = HashMap()
+    lateinit var ADAPTER: PictureListActivity.SimpleItemRecyclerViewAdapter
 
     private const val COUNT = 25
     private const val QUERY = "sky"
     private const val CLIENT_ID = "c68864954c125963dddd4ff7fa8288839b3db8d8dabcfc74939229db8932c193"
 
     init {
-        val requestResult = RequestJSONObjectAsyncTask().execute("https://api.unsplash.com/search/photos?client_id=" +
-                CLIENT_ID + "&page=1&per_page=" + COUNT + "&query=" + QUERY).get()
-        val jsonPictures = requestResult.getJSONArray("results")
-        for (i in 0 until COUNT - 1) {
-            addItem(createPictureItem(jsonPictures.getJSONObject(i)))
-        }
+        RequestJSONObjectAsyncTask().execute("https://api.unsplash.com/search/photos?client_id=" +
+                CLIENT_ID + "&page=1&per_page=" + COUNT + "&query=" + QUERY)
     }
 
     private fun addItem(item: PictureItem) {
@@ -37,6 +41,8 @@ object PictureContent {
     }
 
     data class PictureItem(val id: String, val description: String, val thumbnailURL: String, val fullURL: String) {
+        var thumb: Bitmap? = null
+
         override fun toString(): String = description
     }
 
@@ -44,8 +50,15 @@ object PictureContent {
         override fun doInBackground(vararg urlString: String): JSONObject {
             val url = URL(urlString[0])
             val urlConnection = url.openConnection() as HttpURLConnection
-            val json = urlConnection.inputStream.bufferedReader().readText()
-            return JSONObject(json)
+            return JSONObject(urlConnection.inputStream.bufferedReader().readText())
+        }
+
+        override fun onPostExecute(json: JSONObject?) {
+            val jsonPictures = json!!.getJSONArray("results")
+            for (i in 0 until COUNT - 1) {
+                addItem(createPictureItem(jsonPictures.getJSONObject(i)))
+            }
+            ADAPTER.notifyDataSetChanged()
         }
     }
 }

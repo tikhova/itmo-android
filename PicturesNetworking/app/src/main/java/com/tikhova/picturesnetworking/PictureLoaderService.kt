@@ -1,0 +1,76 @@
+package com.tikhova.picturesnetworking
+
+import android.app.IntentService
+import android.content.Context
+import android.content.Intent
+import android.os.Build
+import android.os.Bundle
+import android.os.ResultReceiver
+import android.support.annotation.RequiresApi
+import android.util.Log
+import java.io.File
+import java.io.FileOutputStream
+import java.net.URL
+
+
+class PictureLoaderService : IntentService("PictureLoader") {
+    val DOWNLOAD_CANCELLED = 1
+    val DOWNLOAD_SUCCESS = 2
+    val DOWNLOAD_ERROR = 3
+
+    fun load(context: Context, url: String?, id: String?, imageReceiver: ResultReceiver, index: Int = -1) {
+        val intent = Intent(context, PictureLoaderService::class.java)
+        intent.putExtra("url", url)
+        intent.putExtra("id", id)
+        intent.putExtra("receiver", imageReceiver)
+        intent.putExtra("index", index)
+        context.startService(intent)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.CUPCAKE)
+    override fun onHandleIntent(intent: Intent) {
+        val url = intent.getStringExtra("url")
+        val id = intent.getStringExtra("id")
+        val receiver: ResultReceiver = intent.getParcelableExtra("receiver")
+        val index = intent.getIntExtra("index", -1)
+        val bundle = Bundle()
+        val path = "$filesDir/$id$index"
+        val response = loadPicture(url, path)
+        bundle.putString("filePath", path)
+        if (index != -1)
+            bundle.putInt("index", index)
+        receiver.send(response, bundle)
+        Log.d("Intent", "Result sent")
+    }
+
+    private fun loadPicture(urlString: String, path: String): Int {
+        Log.d("Load", "Load entered")
+        val file = File(path)
+        if (!file.exists()) {
+            Log.d("Load", "Load to $path started")
+            file.createNewFile()
+            val downloadURL = URL(urlString)
+            val connection = downloadURL.openConnection()
+            val inputStream = connection.getInputStream()
+            val outputStream = FileOutputStream(path)
+            val buffer = ByteArray(connection.contentLength)
+            var readSize = 0
+            var currentlyRead = 0
+            readSize
+            while (readSize < buffer.size) {
+                currentlyRead = inputStream.read(buffer, readSize, buffer.size - readSize)
+                outputStream.write(buffer, readSize, currentlyRead)
+                readSize += currentlyRead
+                Log.d("Load", "Load happening")
+            }
+            Log.d("Load", "Load finished")
+            inputStream.close()
+            outputStream.close()
+
+            return DOWNLOAD_SUCCESS
+        } else {
+            return DOWNLOAD_CANCELLED
+        }
+
+    }
+}
