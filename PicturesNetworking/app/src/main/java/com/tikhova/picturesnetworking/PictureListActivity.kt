@@ -1,7 +1,6 @@
 package com.tikhova.picturesnetworking
 
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
@@ -14,29 +13,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.squareup.picasso.Picasso
 import com.tikhova.picturesnetworking.dummy.PictureContent
 import kotlinx.android.synthetic.main.activity_picture_list.*
-import kotlinx.android.synthetic.main.picture_detail.*
 import kotlinx.android.synthetic.main.picture_list.*
 import kotlinx.android.synthetic.main.picture_list_content.view.*
-import java.io.File
 
-
-/**
- * An activity representing a list of Pings. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a [PictureDetailActivity] representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
- */
 class PictureListActivity : AppCompatActivity() {
 
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
     private var twoPane: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,10 +30,6 @@ class PictureListActivity : AppCompatActivity() {
         toolbar.title = title
 
         if (picture_detail_container != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
             twoPane = true
         }
 
@@ -72,7 +51,6 @@ class PictureListActivity : AppCompatActivity() {
 
 
         inner class ImageResultReceiver : ResultReceiver(Handler()) {
-            val DOWNLOAD_CANCELLED = 1
             val DOWNLOAD_SUCCESS = 2
 
             override fun onReceiveResult(resultCode: Int, resultData: Bundle) {
@@ -125,12 +103,10 @@ class PictureListActivity : AppCompatActivity() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = values[position]
-            if(item.thumb == null) {
-                PictureLoaderService().load(
-                    parentActivity.applicationContext, item?.thumbnailURL, item?.id,
-                    imageResultReceiver, position
-                )
-            }
+            PictureLoaderService().load(
+                parentActivity.applicationContext, item?.thumbnailURL, item?.id,
+                imageResultReceiver, position
+            )
             holder.contentView.text = item.description
             holder.imgView.setImageBitmap(item.thumb)
 
@@ -147,6 +123,19 @@ class PictureListActivity : AppCompatActivity() {
             val contentView: TextView = view.content
         }
 
+    }
+
+    private fun clearCache() {
+        val files = cacheDir.listFiles()
+        if (files != null) {
+            for (file in files)
+                file.delete()
+        }
+    }
+
+    override fun onDestroy() {
+        clearCache()
+        super.onDestroy()
     }
 }
 

@@ -8,10 +8,10 @@ import android.os.Bundle
 import android.os.ResultReceiver
 import android.support.annotation.RequiresApi
 import android.util.Log
+import com.tikhova.picturesnetworking.dummy.PictureContent
 import java.io.File
 import java.io.FileOutputStream
 import java.net.URL
-
 
 class PictureLoaderService : IntentService("PictureLoader") {
     val DOWNLOAD_CANCELLED = 1
@@ -34,41 +34,47 @@ class PictureLoaderService : IntentService("PictureLoader") {
         val receiver: ResultReceiver = intent.getParcelableExtra("receiver")
         val index = intent.getIntExtra("index", -1)
         val bundle = Bundle()
-        val path = "$filesDir/$id$index"
-        val response = loadPicture(url, path)
+        val query = PictureContent.QUERY
+        val name = "$query$id$index.png"
+        val path = "$cacheDir/$name"
+        Log.d("onHandleIntent", "Check file $path")
+        val response = loadPicture(url, path, name)
         bundle.putString("filePath", path)
         if (index != -1)
             bundle.putInt("index", index)
         receiver.send(response, bundle)
-        Log.d("Intent", "Result sent")
+        Log.d("onHandleIntent", "Result sent")
     }
 
-    private fun loadPicture(urlString: String, path: String): Int {
-        Log.d("Load", "Load entered")
+    private fun loadPicture(urlString: String, path: String, name: String): Int {
         val file = File(path)
         if (!file.exists()) {
-            Log.d("Load", "Load to $path started")
-            file.createNewFile()
-            val downloadURL = URL(urlString)
-            val connection = downloadURL.openConnection()
-            val inputStream = connection.getInputStream()
-            val outputStream = FileOutputStream(path)
-            val buffer = ByteArray(connection.contentLength)
-            var readSize = 0
-            var currentlyRead = 0
-            readSize
-            while (readSize < buffer.size) {
-                currentlyRead = inputStream.read(buffer, readSize, buffer.size - readSize)
-                outputStream.write(buffer, readSize, currentlyRead)
-                readSize += currentlyRead
-                Log.d("Load", "Load happening")
+            try {
+                Log.d("loadPicture", "File $path created")
+                file.createNewFile()
+                val downloadURL = URL(urlString)
+                val connection = downloadURL.openConnection()
+                val inputStream = connection.getInputStream()
+                val outputStream = FileOutputStream(path)
+                val buffer = ByteArray(connection.contentLength)
+                var readSize = 0
+                var currentlyRead: Int
+                Log.d("loadPicture", "Load started")
+                while (readSize < buffer.size) {
+                    currentlyRead = inputStream.read(buffer, readSize, buffer.size - readSize)
+                    outputStream.write(buffer, readSize, currentlyRead)
+                    readSize += currentlyRead
+                }
+                Log.d("loadPicture", "Load finished")
+                inputStream.close()
+                outputStream.close()
+                return DOWNLOAD_SUCCESS
+            } catch (e: Exception) {
+                e.printStackTrace()
+                return DOWNLOAD_ERROR
             }
-            Log.d("Load", "Load finished")
-            inputStream.close()
-            outputStream.close()
-
-            return DOWNLOAD_SUCCESS
         } else {
+            Log.d("loadPicture", "File already exists")
             return DOWNLOAD_CANCELLED
         }
 
