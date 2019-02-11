@@ -18,13 +18,15 @@ class PictureLoaderService : IntentService("PictureLoader") {
     val DOWNLOAD_SUCCESS = 2
     val DOWNLOAD_ERROR = 3
 
-    fun load(context: Context, url: String?, id: String?, imageReceiver: ResultReceiver, index: Int = -1) {
-        val intent = Intent(context, PictureLoaderService::class.java)
-        intent.putExtra("url", url)
-        intent.putExtra("id", id)
-        intent.putExtra("receiver", imageReceiver)
-        intent.putExtra("index", index)
-        context.startService(intent)
+    companion object {
+        fun load(context: Context, url: String?, id: String?, imageReceiver: ResultReceiver, index: Int = -1) {
+            val intent = Intent(context, PictureLoaderService::class.java)
+            intent.putExtra("url", url)
+            intent.putExtra("id", id)
+            intent.putExtra("receiver", imageReceiver)
+            intent.putExtra("index", index)
+            context.startService(intent)
+        }
     }
 
     override fun onHandleIntent(intent: Intent) {

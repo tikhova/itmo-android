@@ -40,7 +40,7 @@ class PictureDetailFragment : Fragment() {
         val rootView = inflater.inflate(R.layout.picture_detail, container, false)
 
         item?.let {
-            PictureLoaderService().load(this.context!!, item!!.fullURL, item!!.id, imageResultReceiver)
+            PictureLoaderService.load(this.context!!, item!!.fullURL, item!!.id, imageResultReceiver)
         }
 
         return rootView
