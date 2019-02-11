@@ -27,7 +27,6 @@ class PictureLoaderService : IntentService("PictureLoader") {
         context.startService(intent)
     }
 
-    @RequiresApi(Build.VERSION_CODES.CUPCAKE)
     override fun onHandleIntent(intent: Intent) {
         val url = intent.getStringExtra("url")
         val id = intent.getStringExtra("id")
@@ -38,7 +37,7 @@ class PictureLoaderService : IntentService("PictureLoader") {
         val name = "$query$id$index.png"
         val path = "$cacheDir/$name"
         Log.d("onHandleIntent", "Check file $path")
-        val response = loadPicture(url, path, name)
+        val response = loadPicture(url, path)
         bundle.putString("filePath", path)
         if (index != -1)
             bundle.putInt("index", index)
@@ -46,7 +45,7 @@ class PictureLoaderService : IntentService("PictureLoader") {
         Log.d("onHandleIntent", "Result sent")
     }
 
-    private fun loadPicture(urlString: String, path: String, name: String): Int {
+    private fun loadPicture(urlString: String, path: String): Int {
         val file = File(path)
         if (!file.exists()) {
             try {

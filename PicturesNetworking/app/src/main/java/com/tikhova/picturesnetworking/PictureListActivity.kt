@@ -103,10 +103,8 @@ class PictureListActivity : AppCompatActivity() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = values[position]
-            PictureLoaderService().load(
-                parentActivity.applicationContext, item?.thumbnailURL, item?.id,
-                imageResultReceiver, position
-            )
+            PictureLoaderService().load(parentActivity.applicationContext, item.thumbnailURL, item.id,
+                imageResultReceiver, position)
             holder.contentView.text = item.description
             holder.imgView.setImageBitmap(item.thumb)
 
