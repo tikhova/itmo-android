@@ -3,12 +3,10 @@ package com.tikhova.picturesnetworking
 import android.app.IntentService
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.os.ResultReceiver
-import android.support.annotation.RequiresApi
 import android.util.Log
-import com.tikhova.picturesnetworking.dummy.PictureContent
+import com.tikhova.picturesnetworking.picture.PictureContent
 import java.io.File
 import java.io.FileOutputStream
 import java.net.URL

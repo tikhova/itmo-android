@@ -7,7 +7,7 @@ import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_picture_detail.*
 
 /**
- * An activity representing a single Picture detail screen. This
+ * An activity representing a single Picture.kt detail screen. This
  * activity is only used on narrow width devices. On tablet-size devices,
  * item details are presented side-by-side with a list of items
  * in a [PictureListActivity].
