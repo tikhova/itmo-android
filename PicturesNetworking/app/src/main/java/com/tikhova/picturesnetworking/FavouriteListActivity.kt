@@ -11,13 +11,13 @@ import kotlinx.android.synthetic.main.activity_picture_list.*
 import kotlinx.android.synthetic.main.picture_list.*
 
 
-class PictureListActivity : AppCompatActivity() {
+class FavouriteListActivity : AppCompatActivity() {
 
     private var twoPane: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_picture_list)
+        setContentView(R.layout.activity_favourite_list)
         setSupportActionBar(toolbar)
         toolbar.title = title
         if (picture_detail_container != null) {
@@ -29,7 +29,7 @@ class PictureListActivity : AppCompatActivity() {
             override fun onTextChanged(cs: CharSequence, arg1: Int, arg2: Int, arg3: Int) {}
             override fun beforeTextChanged(cs: CharSequence, arg1: Int, arg2: Int, arg3: Int) {}
             override fun afterTextChanged(text: Editable) {
-                PictureContent.getList(text.toString(), COUNT)
+               // PictureContent.getList(text.toString(), Companion.COUNT)
             }
         })
     }

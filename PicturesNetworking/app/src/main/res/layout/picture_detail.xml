@@ -1,10 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-           xmlns:tools="http://schemas.android.com/tools"
-           android:id="@+id/detail_imgView"
-           android:layout_width="match_parent"
-           android:layout_height="match_parent"
-           android:adjustViewBounds="true"
-           android:scaleType="centerCrop"
-           android:padding="16dp"
-           tools:context=".PictureDetailFragment"/>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 xmlns:tools="http://schemas.android.com/tools"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+                                                 android:fitsSystemWindows="false"
+                                                 tools:context=".PictureDetailActivity">
+    <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+               xmlns:tools="http://schemas.android.com/tools"
+               android:id="@+id/detail_imgView"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:adjustViewBounds="true"
+               android:scaleType="centerCrop"
+               android:padding="16dp"
+               tools:context=".PictureDetailFragment"/>
+
+    <android.support.design.widget.FloatingActionButton
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:clickable="true"
+            app:srcCompat="@drawable/heart"
+            android:id="@+id/floatingActionButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_margin="10dp" android:focusable="true"
+            android:layout_gravity="bottom|end"/>
+</android.support.design.widget.CoordinatorLayout>

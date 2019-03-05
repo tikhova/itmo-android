@@ -1,6 +1,7 @@
 package com.tikhova.picturesnetworking.picture
 
 import com.tikhova.picturesnetworking.PictureListActivity
+import com.tikhova.picturesnetworking.RecyclerViewAdapter
 import com.tikhova.picturesnetworking.UnsplashClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -14,7 +15,7 @@ object PictureContent {
 
     val ITEMS: MutableList<Picture> = ArrayList()
     val ITEM_MAP: MutableMap<String?, Picture> = HashMap()
-    lateinit var ADAPTER: PictureListActivity.SimpleItemRecyclerViewAdapter
+    lateinit var ADAPTER: RecyclerViewAdapter
 
     var COUNT = 0
     val BASE_URL = "https://api.unsplash.com/"
