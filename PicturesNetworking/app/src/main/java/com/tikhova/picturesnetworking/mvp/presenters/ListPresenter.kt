@@ -7,7 +7,6 @@ import com.tikhova.picturesnetworking.mvp.views.ListView
 
 @InjectViewState
 class ListPresenter : MvpPresenter<ListView>() {
-
     fun onGetNewList(text: String, count: Int) {
         PictureContent.getList(text, count)
         viewState.refresh()

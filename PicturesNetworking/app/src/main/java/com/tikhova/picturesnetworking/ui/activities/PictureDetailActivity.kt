@@ -20,7 +20,6 @@ class PictureDetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         if (savedInstanceState == null) {
-            // provider
             val fragment = PictureDetailFragment().apply {
                 arguments = Bundle().apply {
                     putString(
