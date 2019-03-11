@@ -10,25 +10,40 @@
               android:divider="?android:attr/dividerHorizontal"
               android:orientation="horizontal"
               android:showDividers="middle"
-              tools:context=".PictureListActivity">
+              tools:context=".ui.activities.PictureListActivity">
 
     <!--
     This layout is a two-pane layout for the Pictures
     master/detail flow.
     
     -->
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-                                            xmlns:tools="http://schemas.android.com/tools"
-                                            android:id="@+id/picture_list"
-                                            android:name="com.tikhova.picturesnetworking.PictureListFragment"
-                                            android:layout_width="@dimen/item_width"
-                                            android:layout_height="match_parent"
-                                            android:layout_marginLeft="16dp"
-                                            android:layout_marginRight="16dp"
-                                            app:layoutManager="LinearLayoutManager"
-                                            tools:context="com.tikhova.picturesnetworking.PictureListActivity"
-                                            tools:listitem="@layout/picture_list_content"/>
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:hint="@string/search"
+                android:ems="10"
+                android:id="@+id/search_bar"
+                android:autofillHints=""
+                tools:targetApi="o"/>
+
+        <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+                                                xmlns:tools="http://schemas.android.com/tools"
+                                                android:id="@+id/picture_list"
+                                                android:name="com.tikhova.picturesnetworking.PictureListFragment"
+                                                android:layout_width="@dimen/item_width"
+                                                android:layout_height="match_parent"
+                                                android:layout_marginLeft="16dp"
+                                                android:layout_marginRight="16dp"
+                                                app:layoutManager="LinearLayoutManager"
+                                                tools:context="com.tikhova.picturesnetworking.ui.activities.PictureListActivity"
+                                                tools:listitem="@layout/picture_list_content"/>
+
+    </LinearLayout>
 
     <FrameLayout
             android:id="@+id/picture_detail_container"

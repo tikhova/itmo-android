@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">PicturesNetworking</string>
+    <string name="title_picture_detail">Picture Detail</string>
+    <string name="search">Search</string>
+</resources>

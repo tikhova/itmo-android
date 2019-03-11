@@ -1,4 +1,4 @@
-package com.tikhova.picturesnetworking
+package com.tikhova.picturesnetworking.ui.adapters
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,16 +10,21 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.squareup.picasso.Picasso
-import com.tikhova.picturesnetworking.picture.Picture
-import com.tikhova.picturesnetworking.picture.PictureContent
+import com.tikhova.picturesnetworking.R
+import com.tikhova.picturesnetworking.mvp.models.picture.Picture
+import com.tikhova.picturesnetworking.mvp.models.picture.PictureContent
+import com.tikhova.picturesnetworking.ui.activities.PictureDetailActivity
+import com.tikhova.picturesnetworking.ui.fragments.PictureDetailFragment
 import kotlinx.android.synthetic.main.picture_list_content.view.*
+
+// Provider
 
 class RecyclerViewAdapter(
     private val parentActivity: AppCompatActivity,
     private val values: List<Picture>,
     private val twoPane: Boolean
 ) :
-    RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
+    RecyclerView.Adapter<RecyclerViewAdapter.ImageViewHolder>() {
     override fun getItemCount(): Int = PictureContent.COUNT
     private val onClickListener: View.OnClickListener
 
@@ -45,13 +50,13 @@ class RecyclerViewAdapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.picture_list_content, parent, false)
-        return ViewHolder(view)
+        return ImageViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         val item = values[position]
         holder.contentView.text = item.description
         Picasso.get()
@@ -64,9 +69,18 @@ class RecyclerViewAdapter(
         }
     }
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val imgView: ImageView = view.thumb
-        val contentView: TextView = view.content
+    override fun onViewRecycled(holder: ImageViewHolder) {
+        holder.cleanup()
+    }
+
+    inner class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var imgView: ImageView = itemView.thumb
+        val contentView: TextView = itemView.content
+
+        fun cleanup() {
+            Picasso.get().cancelRequest(imgView)
+            imgView.setImageDrawable(null)
+        }
     }
 
 }
